@@ -1,0 +1,59 @@
+
+======================================================================
+STEP 2 — PREPROCESSING & CLEANING
+======================================================================
+Loading raw data ...
+  raw rows: 60,670
+
+======================================================================
+2a. CLEAN TRANSACTIONS
+======================================================================
+                       rows_in: 60,670
+           dropped_missing_qty: 2
+   dropped_impossible_outliers: 1
+    dropped_missing_order_date: 139
+               returns_flagged: 1
+               returns_dropped: 0
+     categorical_values_filled: 0
+                      rows_out: 60,528
+  returns policy: 'keep'  (negatives kept as net demand)
+
+======================================================================
+2b. AGGREGATE TO WEEKLY SERIES (with zero-week fill)
+======================================================================
+  building weekly product panel ...
+    rows: 1,534,992  (products x weeks, zero-filled to global end)
+  building weekly product x country panel ...
+    rows: 1,556,688
+  integrity: total Sales Qty clean=13,876,764 panel=13,876,764  (OK)
+
+======================================================================
+2c. PRODUCT TIERS & DEMAND CLASSIFICATION
+======================================================================
+  Tier counts (routing key for which model each product gets):
+    Tier A: 428 products
+    Tier B: 2,519 products
+    Tier C: 10,777 products
+  Volume share by tier (%):
+    Tier A: 54.6%
+    Tier B: 34.8%
+    Tier C: 10.5%
+  Demand class (Syntetos-Boylan):
+     intermittent: 6,523
+        no_demand: 6,208
+            lumpy: 985
+           smooth: 8
+
+======================================================================
+SAVING PROCESSED FILES (writing CSVs can take ~1 min) ...
+======================================================================
+  cleaned_transactions: /home/claude/cinnamon_sales_forecasting/data/interim/cleaned_transactions.parquet
+  weekly_product_sales: /home/claude/cinnamon_sales_forecasting/data/processed/weekly_product_sales.csv
+  weekly_product_country_sales: /home/claude/cinnamon_sales_forecasting/data/processed/weekly_product_country_sales.csv
+  product_tiers: /home/claude/cinnamon_sales_forecasting/data/processed/product_tiers.csv
+
+======================================================================
+SAVING DIAGNOSTIC CHARTS
+======================================================================
+  saved: /home/claude/cinnamon_sales_forecasting/outputs/figures/02_product_tiers.png
+  saved: /home/claude/cinnamon_sales_forecasting/outputs/figures/02_zero_week_distribution.png

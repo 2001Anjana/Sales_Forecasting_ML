@@ -30,8 +30,9 @@ from transaction-level cinnamon export data in `data/raw/Cinnamon_export_sales.x
 - Random seed: `config.RANDOM_SEED` (42).
 
 ## Status
-- [x] Step 1 — data understanding (`notebooks/01_data_understanding.ipynb`)
-- [ ] Step 2 — preprocessing & EDA
+- [x] Step 1 — data understanding (`notebooks/01_data_understanding.ipynb`, `run_step1.py`)
+- [x] Step 2 — preprocessing & cleaning (`notebooks/02_preprocessing_eda.ipynb`, `run_step2.py`)
+      → produces weekly panels + `product_tiers.csv` (A=428, B=2519, C=10777)
 - [ ] Step 3 — feature engineering
-- [ ] Step 4 — model training
+- [ ] Step 4 — model training (one model per tier; see plan)
 - [ ] Step 5 — forecasting

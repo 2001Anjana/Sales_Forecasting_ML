@@ -79,10 +79,37 @@ PRODUCT_KEY_LEN = 9
 FORECAST_HORIZON_WEEKS = 12      # forecast 12 weeks (3 months) ahead
 WEEK_ANCHOR = "W-MON"            # weeks start on Monday
 
-# Provisional product-tier thresholds (refined during EDA in step 2/3).
-# A product's tier is decided from its lifetime transaction count and activity.
-TIER_A_MIN_TXNS = 50             # high-volume / regular
-TIER_C_MAX_TXNS = 5              # sparse / one-off  (Tier B is the middle band)
+# --------------------------------------------------------------------------- #
+# Cleaning thresholds (step 2a)
+# --------------------------------------------------------------------------- #
+# Physically-impossible quantities are treated as data-entry errors and removed.
+# The legitimate maximum in this data is ~13.5k units / ~20k kg (bulk orders);
+# the single error row was ~14.1M units / ~17.6M kg. 100k sits safely between.
+MAX_PLAUSIBLE_QTY = 100_000
+MAX_PLAUSIBLE_KG = 100_000
+
+# Returns / credit notes appear as negative Sales Qty. Policy:
+#   "keep"  -> keep them so weekly NET demand can dip (default; realistic)
+#   "drop"  -> remove them entirely
+RETURNS_POLICY = "keep"
+
+# Label used to fill missing categorical fields.
+UNKNOWN_LABEL = "UNKNOWN"
+
+# --------------------------------------------------------------------------- #
+# Product-tier thresholds (step 2c) -- calibrated on the real distribution.
+#   Tier A: regular enough to model as a time series   (active in >= N weeks)
+#   Tier C: sparse / one-off                           (<= M lifetime txns)
+#   Tier B: everything in between (lumpy / intermittent)
+# Result on this data: A=430, B=2517, C=10777.
+# --------------------------------------------------------------------------- #
+TIER_A_MIN_ACTIVE_WEEKS = 20
+TIER_C_MAX_TXNS = 5
+
+# Syntetos-Boylan demand-classification thresholds (used for the intermittency
+# label that informs which model each product gets).
+ADI_THRESHOLD = 1.32     # average demand interval
+CV2_THRESHOLD = 0.49     # squared coeff. of variation of non-zero demand sizes
 
 # Reproducibility.
 RANDOM_SEED = 42
