@@ -1,0 +1,25 @@
+# Data — keep raw out of git if it's large/sensitive; never commit interim/processed
+data/interim/
+data/processed/
+# Uncomment to also keep the raw file out of version control:
+# data/raw/
+
+# Outputs
+outputs/models/
+outputs/forecasts/
+# Figures are usually small and nice to track; comment the next line to ignore them
+# outputs/figures/
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

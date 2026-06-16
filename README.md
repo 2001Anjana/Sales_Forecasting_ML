@@ -1,20 +1,80 @@
-# Sales_Forecasting_ML
-Cinnamon Export Sales forecasting weekly demand by machine learning models
-Provided with over three years of transaction-level sales data from a cinnamon export company based in Sri Lanka. The company exports a wide variety of cinnamon products to 91 countries across 19 regions worldwide. Each record in the dataset represents a single sales transaction, with the following key fields:
-•	Sales Qty: The quantity of units sold in each transaction.
-•	Product Code: A unique identifier for each product variant (13,700+ unique codes).
-•	Order Date: The date the order was placed by the customer.
-•	Invoice Date: The date the invoice was issued / shipment dispatched.
-•	Region / Country: The geographic destination of the sale.
-•	Sales Channel: The distribution channel — Retail, Food Service, Global, or Bulk.
-•	Brand Category: The product brand segment (e.g., Retail, Food Service, Specialty & Gift, etc.).
-•	Product Range: The product line grouping (e.g., Premium Grade, Bonus Grade, Exceptional Grade, etc.).
-•	Sales USD: Revenue generated from the transaction in US dollars.
-•	Sales KG: The weight of product sold in kilograms.
-The dataset spans from early 2022 to September 2025 and contains approx- imately 60,000 transactions.
+# Cinnamon Export Sales Forecasting
 
+Forecast **weekly Sales Qty for the next 12 weeks**, (a) per product and
+(b) per product × country, from ~3.5 years of transaction-level export data
+(Feb 2022 – Sep 2025, ~60.7k transactions).
 
-Project Objectives
-1.	Forecast weekly sales quantity per product  for the next 12 weeks (3 months) using historical transaction data. You must aggregate raw transactions into weekly time series before modeling. A product is identi- fied by the first 9 characters of the Product Code. 
-2.	Forecast weekly sales per product per country, drilling down into the top countries for each product to generate country-level forecasts.
-3.	Handle product heterogeneity: The dataset contains both high- volume and low-volume (sparse/intermittent) products. Your approach should account for the different forecasting challenges these present.
+A **product** is the first 9 characters of `Product Code`. Demand is bucketed
+into **Monday-anchored weeks** using `Order Date`.
+
+## Project layout
+
+```
+cinnamon_sales_forecasting/
+├── data/
+│   ├── raw/         Cinnamon_export_sales.xlsx        (read-only input)
+│   ├── interim/     cleaned_transactions.parquet      (step 2 output)
+│   └── processed/   weekly_product_sales.csv, weekly_product_country_sales.csv,
+│                    product_tiers.csv                 (step 2/3 output)
+├── notebooks/       01_data_understanding … 05_forecasting
+├── src/             config, data_loader, profiling, preprocessing, features,
+│                    train, forecast, evaluate
+├── outputs/         figures/  forecasts/  models/
+├── report/          final report + presentation
+├── requirements.txt
+└── README.md
+```
+
+## Setup
+
+```bash
+# 1. (recommended) create a virtual environment
+python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+
+# 2. install dependencies
+pip install -r requirements.txt
+
+# 3. confirm the raw data is in place
+#    data/raw/Cinnamon_export_sales.xlsx
+```
+
+## Step 1 — Data understanding  ✅ (this delivery)
+
+Understand the data before changing it. Run:
+
+```bash
+cd notebooks
+jupyter notebook 01_data_understanding.ipynb     # or: jupyter lab
+```
+
+Or run it headless:
+
+```bash
+jupyter nbconvert --to notebook --execute --inplace \
+    notebooks/01_data_understanding.ipynb
+```
+
+It produces, in `outputs/figures/`:
+* `01_product_pareto.png` – cumulative product-volume curve (justifies tiering)
+* `01_txns_per_product.png` – long-tail histogram of transactions per product
+* `01_weekly_total_qty.png` – company-wide weekly demand (trend & seasonality)
+
+### What step 1 found
+* Target `Sales Qty` is highly skewed; contains returns (negatives), zeros, and
+  an implausible giant outlier to investigate in cleaning.
+* **Extreme product concentration:** ~170 products = 80% of volume; ~6,000
+  products have a single lifetime transaction → modelling must be **tier-based**.
+* Minor missingness across columns; 142 missing `Order Date`s; some rows have
+  `Invoice Date` before `Order Date`.
+
+The modules used by the notebook live in `src/`:
+* `config.py` – all paths, column names, thresholds, the 12-week horizon.
+* `data_loader.py` – load + light type coercion (no cleaning).
+* `profiling.py` – missing/cardinality/numeric reports, Pareto & sparsity, plots.
+
+## Roadmap (later steps)
+2. Preprocessing & EDA – clean, aggregate to weekly, reindex zero-weeks, build tiers.
+3. Feature engineering – calendar, lags, rolling stats, intermittency features.
+4. Model training – baselines + global LightGBM (+ SARIMA/Prophet on Tier A).
+5. Forecasting – recursive 12-week forecasts, write output CSVs.
+6. Report & presentation.
