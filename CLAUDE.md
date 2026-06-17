@@ -33,6 +33,7 @@ from transaction-level cinnamon export data in `data/raw/Cinnamon_export_sales.x
 - [x] Step 1 — data understanding (`notebooks/01_data_understanding.ipynb`, `run_step1.py`)
 - [x] Step 2 — preprocessing & cleaning (`notebooks/02_preprocessing_eda.ipynb`, `run_step2.py`)
       → produces weekly panels + `product_tiers.csv` (A=428, B=2519, C=10777)
-- [ ] Step 3 — feature engineering
+- [x] Step 3 — feature engineering (`notebooks/03_feature_engineering.ipynb`, `run_step3.py`)
+      → `feature_table.parquet` for Tier A+B (461,759 rows, 30 features, leakage-checked)
 - [ ] Step 4 — model training (one model per tier; see plan)
 - [ ] Step 5 — forecasting

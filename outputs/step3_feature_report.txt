@@ -1,0 +1,50 @@
+
+======================================================================
+STEP 3 — FEATURE ENGINEERING
+======================================================================
+Building feature table for Tiers A and B (this takes ~15-30s) ...
+  rows           : 461,759
+  products        : 2,947
+  feature columns : 36
+  tier breakdown  : {'B': np.int64(2519), 'A': np.int64(428)}
+
+======================================================================
+FEATURE FAMILIES
+======================================================================
+  calendar   : woy, month, quarter, year, week_of_month, woy_sin/cos, month_sin/cos
+  seasonal   : is_quarter_end, is_peak_month
+  lag        : ['lag_1', 'lag_2', 'lag_4', 'lag_8', 'lag_12', 'lag_52']
+  rolling    : ['roll_mean_4', 'roll_std_4', 'roll_med_4', 'roll_mean_8', 'roll_std_8', 'roll_med_8', 'roll_mean_13', 'roll_std_13', 'roll_med_13']
+  intermittency: weeks_since_last_sale, zero_frac_13, mean_nonzero_13, weeks_since_start
+  static     : Brand Category, Product Range, Sales Channel, Region
+
+======================================================================
+LEAKAGE SANITY-CHECK
+======================================================================
+  For one product, lag_1 should equal the previous week's Sales Qty:
+week_start  Sales Qty  lag_1  lag_2  roll_mean_4
+2022-11-07        2.0    NaN    NaN          NaN
+2022-11-14        0.0    2.0    NaN     2.000000
+2022-11-21        0.0    0.0    2.0     1.000000
+2022-11-28        0.0    0.0    0.0     0.666667
+2022-12-05        0.0    0.0    0.0     0.500000
+  lag_1 == previous-week Sales Qty everywhere: PASS
+
+======================================================================
+SAVING FEATURE TABLE
+======================================================================
+  saved: /home/claude/cinnamon_sales_forecasting/data/processed/feature_table.parquet
+
+======================================================================
+SAVING FEATURE CORRELATION HEATMAP
+======================================================================
+  saved: /home/claude/cinnamon_sales_forecasting/outputs/figures/03_feature_correlation.png
+  Top 8 features by |correlation| with Sales Qty:
+               roll_std_13: +0.352
+                roll_std_8: +0.340
+              roll_mean_13: +0.334
+           mean_nonzero_13: +0.325
+               roll_mean_8: +0.319
+               roll_mean_4: +0.285
+                roll_std_4: +0.275
+                roll_med_4: +0.202
