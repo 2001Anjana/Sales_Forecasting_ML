@@ -1,0 +1,41 @@
+
+======================================================================
+STEP 5 — FINAL 12-WEEK FORECASTS
+======================================================================
+Loading inputs ...
+  forecasting 12 weeks: 2025-09-22 .. 2025-12-08
+
+======================================================================
+TRAINING & FORECASTING (a few minutes) ...
+======================================================================
+  estimating volume-bias correction on a 12-week backtest ...
+  bias-correction factors (multiplier applied to LightGBM):
+    Tier A: x3.37
+    Tier B: x4.96
+    Tier C: x1.00
+
+======================================================================
+PRODUCT-LEVEL FORECAST
+======================================================================
+  rows: 164,688  (products 13,724 x 12 weeks)
+  model used by tier:
+    Tier A: LightGBM(bias-corrected)  (428 products)
+    Tier B: LightGBM(bias-corrected)  (2,519 products)
+    Tier C: MovingAvg8  (10,777 products)
+  total forecast volume by tier (12-week sum):
+    Tier A: 653,528 units
+    Tier B: 556,259 units
+    Tier C: 276,007 units
+
+======================================================================
+PRODUCT x COUNTRY FORECAST (top-down by recent share)
+======================================================================
+  rows: 165,552  (product-country pairs 13,796)
+  consistency: product total=1,485,795  country total=1,485,794  (OK)
+
+======================================================================
+SAVING FORECASTS
+======================================================================
+  product: /home/claude/cinnamon_sales_forecasting/outputs/forecasts/product_12_week_forecast.csv
+  product_country: /home/claude/cinnamon_sales_forecasting/outputs/forecasts/product_country_12_week_forecast.csv
+  saved chart: /home/claude/cinnamon_sales_forecasting/outputs/figures/05_forecast_overview.png

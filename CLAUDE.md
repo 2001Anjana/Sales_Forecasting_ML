@@ -38,4 +38,8 @@ from transaction-level cinnamon export data in `data/raw/Cinnamon_export_sales.x
 - [x] Step 4 — model training (`notebooks/04_model_training.ipynb`, `run_step4.py`)
       → baselines + Croston/TSB + global LightGBM (Tweedie, recursive); per-tier
         WAPE/MASE/vol_capture in `outputs/model_comparison.csv`; model in `outputs/models/`
-- [ ] Step 5 — forecasting (retrain on all data, write 12-week forecasts)
+- [x] Step 5 — forecasting (`notebooks/05_forecasting.ipynb`, `run_step5.py`)
+      → `outputs/forecasts/product_12_week_forecast.csv` + product×country version.
+        Tier A/B = LightGBM (bias-corrected), Tier C = MovingAvg8.
+
+PROJECT COMPLETE. Full pipeline: run_step1 → run_step2 → run_step3 → run_step4 → run_step5.

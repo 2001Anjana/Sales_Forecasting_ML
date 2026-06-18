@@ -78,3 +78,19 @@ The modules used by the notebook live in `src/`:
 4. Model training – baselines + global LightGBM (+ SARIMA/Prophet on Tier A).
 5. Forecasting – recursive 12-week forecasts, write output CSVs.
 6. Report & presentation.
+
+## Full pipeline (run in order)
+
+```bash
+python run_step1.py   # data understanding
+python run_step2.py   # cleaning + weekly panels + tiers
+python run_step3.py   # feature engineering
+python run_step4.py   # model training + per-tier evaluation
+python run_step5.py   # final 12-week forecasts (deliverables)
+```
+
+Models by tier (chosen in step 4): Tier A & B → global LightGBM (Tweedie,
+recursive, volume-bias-corrected); Tier C → moving-average baseline.
+
+Final deliverables: `outputs/forecasts/product_12_week_forecast.csv` and
+`outputs/forecasts/product_country_12_week_forecast.csv`.
