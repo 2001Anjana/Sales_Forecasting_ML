@@ -35,5 +35,7 @@ from transaction-level cinnamon export data in `data/raw/Cinnamon_export_sales.x
       → produces weekly panels + `product_tiers.csv` (A=428, B=2519, C=10777)
 - [x] Step 3 — feature engineering (`notebooks/03_feature_engineering.ipynb`, `run_step3.py`)
       → `feature_table.parquet` for Tier A+B (461,759 rows, 30 features, leakage-checked)
-- [ ] Step 4 — model training (one model per tier; see plan)
-- [ ] Step 5 — forecasting
+- [x] Step 4 — model training (`notebooks/04_model_training.ipynb`, `run_step4.py`)
+      → baselines + Croston/TSB + global LightGBM (Tweedie, recursive); per-tier
+        WAPE/MASE/vol_capture in `outputs/model_comparison.csv`; model in `outputs/models/`
+- [ ] Step 5 — forecasting (retrain on all data, write 12-week forecasts)
